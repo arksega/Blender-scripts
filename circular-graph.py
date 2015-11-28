@@ -1,4 +1,4 @@
-# Blender 2.63
+# Blender 2.74
 import bpy
 import bmesh
 import random
