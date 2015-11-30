@@ -1,4 +1,4 @@
-# Blender 2.63
+# Blender 2.74
 import bpy
 import bmesh
 import random
@@ -25,14 +25,17 @@ def rebanada (deg, size, stepSize, name):
         rad = math.radians(deg)
         bm.verts.new((math.sin(rad), math.cos(rad), 0.0))
         verts.append(rad)
-        
+
     if not len(verts) % 2:
         rad = (verts[-1] + verts[-2]) / 2
         bm.verts.new((math.sin(rad), math.cos(rad), 0.0))
+        bm.verts.ensure_lookup_table()
         bm.verts[-1].co.xyz, bm.verts[-2].co.xyz = bm.verts[-2].co.xyz, bm.verts[-1].co.xyz
         verts[-1:-1] = [rad]
-    
+
+
     for face in range(int(len(verts) / 2)):
+        bm.verts.ensure_lookup_table()
         bm.faces.new(bm.verts[1 + 2 * face:4 + 2 * face] + [bm.verts[0]])
         
     bm.to_mesh(mesh)
@@ -65,7 +68,7 @@ def grafica(data):
         obj = rebanada(parts[part], size, step, 'R' + str(part))
         obj.select = True
         bpy.ops.transform.translate(value=(0, 0, 0.1 * part))
-        bpy.ops.transform.rotate(value=(rot * math.pi * 2,), axis=(0, 0, -1))
+        bpy.ops.transform.rotate(value=rot * math.pi * 2, axis=(0, 0, -1))
         rot += parts[part]
         mat = random.choice(list(bpy.data.materials))
         obj.data.materials.append(mat)
